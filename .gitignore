@@ -1,0 +1,11 @@
+node_modules
+dist
+*.mp3
+_log
+_static/document
+_static/comments
+_static/checklist
+_static/message
+_static/notes
+_static/task
+.env
