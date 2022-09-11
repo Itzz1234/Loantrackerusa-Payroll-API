@@ -6,6 +6,7 @@ export default {
         loanConfig:'loanConfig'
     },
     table:{
+        auth:'auth',
         bankDetails:'bankDetails',
         bankExpenses:'bankExpenses',
         compensations:'compensations',

@@ -1,6 +1,6 @@
 
 
-import {addMemberDetail, updateMemberDetail, deleteMemberDetails, getLoanOfficersMembers, getLoanProcessorMembers, getMemberDetailsByMemberId} from './controller'
+import {addMemberDetail, updateMemberDetail, deleteMemberDetails, getLoanOfficersMembers, getLoanProcessorMembers, getMemberDetailsByMemberId,verifyMemberAuthToken,updateMemberAuthToken} from './controller'
 import serviceResponse from '../utils/serviceResponse';
 import CONSTANT from '../../constant';
 import {Application, Request, Response} from 'express';
@@ -57,6 +57,24 @@ const routes = (app: Application) => {
     app.post('/v2/members/details/id',  (req: Request, res: Response) => {
         const body = req.body;
         getMemberDetailsByMemberId(body).then((result: any) => {
+            res.send(serviceResponse({ result, status: CONSTANT.apiStatus.success }));
+        }).catch((error: any) => {
+            res.send(serviceResponse({ error, status: CONSTANT.apiStatus.failed }));
+        })
+    })
+
+    app.post('/v2/members/update-user-token',  (req: Request, res: Response) => {
+        const body = req.body;
+        updateMemberAuthToken(body).then((result: any) => {
+            res.send(serviceResponse({ result, status: CONSTANT.apiStatus.success }));
+        }).catch((error: any) => {
+            res.send(serviceResponse({ error, status: CONSTANT.apiStatus.failed }));
+        })
+    })
+
+    app.post('/v2/members/verify-user-token',  (req: Request, res: Response) => {
+        const body = req.body;
+        verifyMemberAuthToken(body).then((result: any) => {
             res.send(serviceResponse({ result, status: CONSTANT.apiStatus.success }));
         }).catch((error: any) => {
             res.send(serviceResponse({ error, status: CONSTANT.apiStatus.failed }));

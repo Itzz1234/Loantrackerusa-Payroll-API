@@ -91,7 +91,6 @@ export const deleteMemberDetails = async (body: any) => {
     }
 }
 
-
 // not is use anymore - query updated with join in getLoanOfficersMembers
 export const getMemberDetailsByMemberId = async (body: any) => {
     try {
@@ -103,3 +102,45 @@ export const getMemberDetailsByMemberId = async (body: any) => {
     }
 }
 
+export const verifyMemberAuthToken = async (body: any) => {
+    try {
+        const query = await execute(`SELECT * FROM ${schema.payroll}."${table.auth}"  where "u_id"= '${body.u_id}'`)
+        if (query?.length == 1) {
+            if (query[0]?.token != "") {
+                const model = {
+                    u_id: body.u_id,
+                    token: "",
+                };
+                await update(schema.payroll, table.auth, {u_id: body.u_id}, model);
+            }
+            return query;
+        } else {
+            return Promise.reject("Invalid auth token");
+        }
+    } catch (err) {
+        return Promise.reject(err);
+    }
+}
+
+export const updateMemberAuthToken = async (body: any) => {
+    try {
+        try {
+            const query = await execute(`SELECT * FROM ${schema.payroll}."${table.auth}"  where "u_id"= '${body.u_id}'`)
+            const model = {
+                u_id: body.u_id,
+                token: body.token,
+            };
+            if (query?.length == 0) {
+                const authResponse = await insert(schema.payroll, table.auth, model);
+                return authResponse;
+            } else {
+                const authResponse = await update(schema.payroll, table.auth, {u_id: body.u_id}, model);
+                return authResponse;
+            }
+        } catch (err) {
+            return Promise.reject(err);
+        }
+    } catch (err) {
+        return Promise.reject(err);
+    }
+}
